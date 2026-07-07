@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARPMart - Your Premium Marketplace</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1f55ad',
+                        secondary: '#FF5722'
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(31, 85, 173, 0.15);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 custom-scrollbar font-sans">
+
+    <!-- Global Header (Controlled by UI.js) -->
+    <header class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
+                        <i data-lucide="zap" class="w-6 h-6 text-white fill-white"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-black tracking-tight text-slate-900 uppercase">ARPMart</span>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Premium
+                            Store</span>
+                    </div>
+                </a>
+
+                <!-- Search (Global Search Component) -->
+                <div class="hidden md:flex flex-1 max-w-lg mx-12">
+                    <button onclick="ShopUI.toggleSearch()"
+                        class="w-full flex items-center justify-between bg-slate-100/50 border-2 border-transparent rounded-2xl py-3 px-6 text-sm text-slate-400 hover:bg-white hover:border-primary/10 transition-all outline-none group">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="search" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                            <span>Search everything...</span>
+                        </div>
+                        <div class="flex items-center gap-1 px-2 py-0.5 bg-slate-200/50 rounded-lg">
+                            <span class="text-[10px] font-black">CTRL K</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-6">
+                    <div id="user-section" class="flex items-center gap-2">
+                        <!-- Populated by ShopUI -->
+                    </div>
+
+                    <button id="openCartBtn"
+                        class="group relative p-3 text-slate-600 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 rounded-2xl transition-all duration-300">
+                        <i data-lucide="shopping-bag" class="w-6 h-6 group-hover:text-primary transition-colors"></i>
+                        <span id="cartCount"
+                            class="absolute top-1 right-1 bg-secondary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-lg border-2 border-white shadow-md">0</span>
+                    </button>
+
+                    <button onclick="openStoresDirectory()"
+                        class="md:hidden p-3 text-slate-600 hover:bg-slate-100 rounded-2xl transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- Premium Hero Section -->
+        <section class="relative rounded-[2.5rem] overflow-hidden aspect-[21/10] group shadow-2xl shadow-primary/5">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600" alt="New Arrival"
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+            <div
+                class="absolute inset-0 bg-gradient-to-tr from-slate-900/80 via-slate-900/30 to-transparent flex items-center px-10 sm:px-20">
+                <div class="max-w-xl space-y-6">
+                    <div
+                        class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-4 py-2 rounded-full tracking-[0.2em] uppercase">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                        </span>
+                        New Spring Collection
+                    </div>
+                    <h1 class="text-4xl sm:text-7xl font-black text-white leading-[1.1] tracking-tighter">Elevate Your
+                        Everyday.</h1>
+                    <p class="text-slate-200 text-lg font-medium max-w-md">Discover the intersection of lifestyle and
+                        technology with our curated premium selections.</p>
+                    <div class="flex items-center gap-4 pt-4">
+                        <button
+                            onclick="document.getElementById('productGrid').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                            class="bg-white text-slate-900 px-10 py-4 rounded-2xl font-bold hover:shadow-2xl hover:shadow-white/20 transition-all flex items-center gap-3 active:scale-95 text-sm uppercase tracking-widest">
+                            Shop Catalog <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Category Navigation -->
+        <section class="space-y-8">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-black uppercase tracking-[0.3em] text-slate-400">Discover More</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+                <!-- Stores -->
+                <button onclick="openStoresDirectory()"
+                    class="category-btn active group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500">
+                    <div
+                        class="p-4 bg-primary/5 rounded-2xl group-hover:bg-primary group-hover:rotate-12 transition-all duration-500">
+                        <i data-lucide="layout-grid"
+                            class="w-8 h-8 text-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight">Stores</span>
+                </button>
+                <!-- Electronics -->
+                <a href="tvs-appliance.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-purple-50 rounded-2xl group-hover:bg-purple-600 transition-all duration-500">
+                        <i data-lucide="laptop"
+                            class="w-8 h-8 text-purple-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Electronics</span>
+                </a>
+                <!-- Fashion -->
+                <a href="fashion-shop.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-pink-50 rounded-2xl group-hover:bg-pink-600 transition-all duration-500">
+                        <i data-lucide="shirt"
+                            class="w-8 h-8 text-pink-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Fashion</span>
+                </a>
+                <!-- Home & Kitchen -->
+                <a href="home_kitchen.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-amber-50 rounded-2xl group-hover:bg-amber-600 transition-all duration-500">
+                        <i data-lucide="soup"
+                            class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Kitchen</span>
+                </a>
+                <!-- Mobiles -->
+                <a href="mobiles-tech.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-emerald-50 rounded-2xl group-hover:bg-emerald-600 transition-all duration-500">
+                        <i data-lucide="smartphone"
+                            class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Mobile</span>
+                </a>
+                <!-- Grocery -->
+                <a href="grocery-shop.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-rose-50 rounded-2xl group-hover:bg-rose-600 transition-all duration-500">
+                        <i data-lucide="apple"
+                            class="w-8 h-8 text-rose-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Grocery</span>
+                </a>
+                <!-- Travel -->
+                <a href="flynow.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-sky-50 rounded-2xl group-hover:bg-sky-600 transition-all duration-500">
+                        <i data-lucide="plane"
+                            class="w-8 h-8 text-sky-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Travel</span>
+                </a>
+                <!-- Furniture -->
+                <a href="furniwood.html"
+                    class="group flex flex-col items-center gap-4 p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-center">
+                    <div class="p-4 bg-orange-50 rounded-2xl group-hover:bg-orange-600 transition-all duration-500">
+                        <i data-lucide="sofa"
+                            class="w-8 h-8 text-orange-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight text-slate-600">Living</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Product Showcase -->
+        <section class="space-y-10">
+            <div class="flex items-end justify-between">
+                <div class="space-y-2">
+                    <h2 class="text-4xl font-black text-slate-900 tracking-tighter">Curated Specials</h2>
+                    <p class="text-slate-400 font-medium">Selected for quality, crafted for excellence.</p>
+                </div>
+                <div class="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <span id="product-count"
+                        class="bg-slate-900 text-white font-black px-3 py-1.5 rounded-xl text-xs tracking-tighter">0</span>
+                    <span class="text-xs font-bold text-slate-500 pr-3 uppercase tracking-widest">Total Finds</span>
+                </div>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="bg-white border-t border-slate-100 py-20">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-8">
+            <a href="#"
+                class="flex items-center justify-center gap-2 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                <div class="bg-slate-900 p-1.5 rounded-lg">
+                    <i data-lucide="zap" class="w-4 h-4 text-white fill-white"></i>
+                </div>
+                <span class="text-lg font-bold tracking-tight text-slate-800">ARPMart</span>
+            </a>
+            <p class="text-slate-400 text-sm font-medium">© 2026 ARPMart. Distributed under the Premium License.</p>
+        </div>
+    </footer>
+
+    <!-- Core Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default load: Featured products only
+            renderProducts();
+
+            // Handle state updates (Cart, Login, etc.)
+            ARPMart.subscribe((state) => {
+                // If a search or category filter is active, we don't want to reset to 'featured'
+                // For simplicity in this architectural refactor, we refresh the current view
+                // if it's the default state.
+                const params = new URLSearchParams(window.location.search);
+                if (!params.get('search')) {
+                    // Check if a category button is active
+                    const activeBtn = document.querySelector('.category-btn.active');
+                    if (activeBtn) {
+                        const cat = activeBtn.innerText.toLowerCase().trim();
+                        if (cat === 'all') {
+                            renderProducts(); // Back to featured
+                        } else {
+                            filterCategory(cat === 'mobile' ? 'mobiles' : cat);
+                        }
+                    } else {
+                        renderProducts();
+                    }
+                }
+            });
+
+            // Handle URL Search Params
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search');
+            if (initialSearch) {
+                const results = window.GLOBAL_CATALOG.filter(p =>
+                    p.name.toLowerCase().includes(initialSearch.toLowerCase())
+                );
+                renderProducts(results);
+            }
+        });
+
+        /**
+         * Render products specifically for the home page layout
+         */
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+
+            // Core Logic: If no list provided, show ONLY featured products on Home Page
+            const products = customList || window.GLOBAL_CATALOG.filter(p => p.featured);
+
+            if (document.getElementById('product-count')) {
+                document.getElementById('product-count').textContent = products.length;
+            }
+
+            if (products.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-20 text-center space-y-4">
+                    <p class="text-slate-400 font-bold uppercase tracking-widest">No products matching your search</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="product-card group bg-white rounded-[2.5rem] border border-slate-100 p-6 relative flex flex-col cursor-pointer" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <div class="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-slate-50 mb-6 border border-slate-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                        ${p.discount > 0 ? `
+                            <div class="absolute top-4 left-4 bg-slate-900/90 backdrop-blur-md text-white text-[10px] font-black px-4 py-2 rounded-2xl shadow-xl">
+                                -${p.discount}% OFF
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Quick View Badge -->
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                             <div class="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-black px-6 py-3 rounded-2xl uppercase tracking-[0.2em] transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                Quick View
+                             </div>
+                        </div>
+
+                        <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" class="absolute bottom-4 right-4 p-4 bg-white text-slate-900 rounded-2xl shadow-2xl translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-primary hover:text-white transition-all duration-500 z-10 active:scale-90">
+                            <i data-lucide="plus" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-3 px-2 flex-1 flex flex-col">
+                        <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                            <span>${p.brand}</span>
+                            <div class="flex items-center gap-1 text-amber-500">
+                                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                                <span>${p.rating}</span>
+                            </div>
+                        </div>
+                        <h4 class="font-black text-xl text-slate-900 line-clamp-2 leading-tight tracking-tight h-14 uppercase italic">${p.name}</h4>
+                        <div class="mt-auto flex items-end justify-between pt-4 border-t border-slate-50">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-bold text-slate-400 line-through">₹${(p.price * 1.2).toLocaleString('en-IN')}</span>
+                                <span class="text-2xl font-black text-primary tracking-tighter italic">₹${p.price.toLocaleString('en-IN')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        /**
+         * Add to cart and notify UI
+         */
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`Added ${product.name} to your bag!`);
+            }
+        }
+
+        /**
+         * Filter by category
+         */
+        function filterCategory(cat) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-primary', 'shadow-2xl', 'shadow-primary/10');
+            });
+            event.currentTarget.classList.add('active', 'border-primary', 'shadow-2xl', 'shadow-primary/10');
+
+            const filtered = cat === 'all'
+                ? null // Will trigger featured default in renderProducts
+                : window.GLOBAL_CATALOG.filter(p => p.category === cat);
+
+            renderProducts(filtered);
+
+            // Scroll to grid on mobile
+            if (window.innerWidth < 768) {
+                document.getElementById('productGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        /**
+         * Open Stores Directory Modal
+         */
+        function openStoresDirectory() {
+            const modal = document.getElementById('storesDirectoryModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('storesDirectoryContent').classList.remove('scale-95', 'opacity-0');
+                }, 10);
+            }
+        }
+
+        /**
+         * Close Stores Directory Modal
+         */
+        function closeStoresDirectory() {
+            const modal = document.getElementById('storesDirectoryModal');
+            const content = document.getElementById('storesDirectoryContent');
+            if (modal && content) {
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+    </script>
+
+    <!-- Stores Directory Modal -->
+    <div id="storesDirectoryModal" class="fixed inset-0 z-[160] hidden overflow-y-auto">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity" onclick="closeStoresDirectory()">
+        </div>
+        <div class="flex min-h-full items-center justify-center p-4 sm:p-6 relative">
+            <div id="storesDirectoryContent"
+                class="relative w-full max-w-5xl bg-slate-50 rounded-[3rem] shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300">
+                <div class="p-8 sm:p-12 bg-white flex justify-between items-center border-b border-slate-100">
+                    <div class="space-y-1">
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tighter uppercase italic">ARPMart Stores
+                        </h2>
+                        <p class="text-slate-500 text-sm font-medium">Explore our specialized premium marketplaces.</p>
+                    </div>
+
+                    <button onclick="closeStoresDirectory()"
+                        class="p-3 hover:bg-slate-100 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-6 h-6 text-slate-600"></i>
+                    </button>
+                </div>
+
+                <div class="p-8 sm:p-12">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Gym Equipments -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='gym-fitness.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:bg-orange-500 transition-colors">
+                                <i data-lucide="dumbbell"
+                                    class="w-8 h-8 text-orange-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Gym & Fitness</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">
+                                    Equipments • Health</p>
+                            </div>
+                        </div>
+
+                        <!-- Healthcare -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='healthcare.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                                <i data-lucide="cross"
+                                    class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Healthcare</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Medicine
+                                    • Wellness</p>
+                            </div>
+                        </div>
+
+                        <!-- Books & Stationery -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='books-study.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-500 transition-colors">
+                                <i data-lucide="book-open"
+                                    class="w-8 h-8 text-indigo-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Books & Study</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">
+                                    Textbooks • Stationery</p>
+                            </div>
+                        </div>
+
+                        <!-- Jewelry -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='jewelry.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center group-hover:bg-rose-500 transition-colors">
+                                <i data-lucide="gem"
+                                    class="w-8 h-8 text-rose-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Jewelry</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Rings •
+                                    Necklaces</p>
+                            </div>
+                        </div>
+
+                        <!-- Automotive -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='automotive.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center group-hover:bg-slate-800 transition-colors">
+                                <i data-lucide="car"
+                                    class="w-8 h-8 text-slate-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Automotive</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Parts •
+                                    Accessories</p>
+                            </div>
+                        </div>
+
+                        <!-- Pet Supplies -->
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group flex items-center gap-6"
+                            onclick="window.location.href='pet-supplies.html'">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center group-hover:bg-teal-500 transition-colors">
+                                <i data-lucide="paw-print"
+                                    class="w-8 h-8 text-teal-600 group-hover:text-white transition-colors"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-lg text-slate-900 leading-tight">Pet Supplies</h3>
+                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Food •
+                                    Toys • Care</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mt-8 text-center">
+                        <p class="text-slate-400 text-sm font-medium">More exclusive stores launching every month!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

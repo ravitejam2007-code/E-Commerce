@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobiles & Tech | ARPMart - Premium Gadget Hub</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tech: '#3b82f6',
+                        device: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .tech-card {
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: white;
+            box-shadow: 0 40px 80px -20px rgba(15, 23, 42, 0.1);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.256);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans custom-scrollbar min-h-screen overflow-x-hidden">
+
+    <!-- Tech Header -->
+    <header class="glass-header sticky top-0 z-50 text-white">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="bg-tech p-2 rounded-xl shadow-lg shadow-tech/30 group-hover:rotate-12 transition-transform">
+                    <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-black uppercase italic">TechBox</span>
+                    <span class="text-[9px] font-bold text-tech uppercase tracking-[0.3em]">ARPMart Premium</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div id="user-section" class="flex items-center gap-4 text-white"></div>
+                <button onclick="ShopUI.toggleSearch()"
+                    class="group p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400 group-hover:text-tech transition-colors"></i>
+                </button>
+                <button id="openCartBtn"
+                    class="relative group p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-tech"></i>
+                    <span id="cartCount"
+                        class="absolute -top-1 -right-1 bg-tech text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-slate-900">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+        <!-- Cyber Hero -->
+        <section class="relative rounded-[3rem] overflow-hidden aspect-[21/7] bg-device">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600"
+                class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay">
+            <div
+                class="absolute inset-0 bg-gradient-to-tr from-device via-device/60 to-transparent flex items-center px-12 sm:px-24">
+                <div class="max-w-2xl space-y-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-tech/20 border border-tech/30 text-tech text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-[0.4em]">
+                        Performance Redefined
+                    </div>
+                    <h1
+                        class="text-5xl sm:text-8xl font-black text-white leading-[0.9] tracking-tighter italic text-glow">
+                        FUTURE<br>UNLOCKED
+                    </h1>
+                    <p class="text-slate-400 text-lg font-medium max-w-md">The most powerful mobile technology on the
+                        planet, curated for the elite.</p>
+                    <div class="flex gap-4">
+                        <button
+                            class="bg-tech text-white px-12 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:shadow-2xl hover:shadow-tech/40 transition-all active:scale-95">Explore
+                            Tier 1</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Marquee Section -->
+        <section id="marqueeSection" class="relative w-[100vw] left-[50%] -translate-x-[50%] overflow-hidden py-12 bg-slate-50/50">
+            <div class="marquee-track flex will-change-transform">
+                <!-- JS populated -->
+            </div>
+            <p class="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-12">Select a brand to view available gear</p>
+        </section>
+
+        <!-- Product Grid Overlay -->
+        <div id="productSection" class="hidden space-y-8">
+            <div>
+                <button onclick="showMarquee()" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-colors shadow-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    Back to Brands
+                </button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+                <!-- Specs Filter -->
+                <aside class="space-y-8 h-fit lg:sticky lg:top-28">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-10">
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-black uppercase tracking-[0.4em] text-slate-400">Powerhouse Brands</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="filterBrand('Apple')"
+                                class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase text-slate-600 hover:bg-tech hover:text-white transition-all">Apple</button>
+                            <button onclick="filterBrand('Samsung')"
+                                class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase text-slate-600 hover:bg-tech hover:text-white transition-all">Samsung</button>
+                            <button onclick="filterBrand('OnePlus')"
+                                class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase text-slate-600 hover:bg-tech hover:text-white transition-all">OnePlus</button>
+                            <button onclick="filterBrand('Google')"
+                                class="p-3 bg-slate-50 rounded-2xl text-[10px] font-black uppercase text-slate-600 hover:bg-tech hover:text-white transition-all">Google</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-6 border-t border-slate-50">
+                        <h4 class="text-xs font-black uppercase tracking-[0.4em] text-slate-400">Sort By Logic</h4>
+                        <select id="sortLogic" onchange="renderProducts()"
+                            class="w-full bg-slate-50 border-none rounded-2xl p-4 text-xs font-bold text-slate-600 focus:ring-2 focus:ring-tech/20 outline-none">
+                            <option value="all">Trending Tech</option>
+                            <option value="price-asc">Price: Low to Pro</option>
+                            <option value="price-desc">Price: Pro to Low</option>
+                        </select>
+                    </div>
+
+                    <button onclick="clearEngine()"
+                        class="w-full py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-tech transition-colors">Clear
+                        Engine</button>
+                </div>
+            </aside>
+
+            <!-- Tech Showcase -->
+            <div class="lg:col-span-3 space-y-10">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">The Inventory
+                        </h2>
+                        <p class="text-slate-400 font-medium text-sm">Authenticated & Warranty Backed.</p>
+                    </div>
+                    <!-- Real-time Search Engine -->
+                    <div class="relative w-full md:w-80 group">
+                        <i data-lucide="search"
+                            class="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-tech transition-colors"></i>
+                        <input type="text" id="mobileSearch" oninput="renderProducts()"
+                            placeholder="Search gear by name..."
+                            class="w-full bg-white border border-slate-100 rounded-2xl py-4 pl-12 pr-6 text-xs font-bold shadow-sm outline-none focus:ring-2 focus:ring-tech/20 focus:border-tech/20 transition-all placeholder:text-slate-300">
+                    </div>
+                </div>
+
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <!-- Tech Products Hydrated by JS -->
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <footer class="bg-device text-white py-32 mt-24">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-8">
+            <div class="flex justify-center items-center gap-3">
+                <div class="bg-tech p-2 rounded-xl">
+                    <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-2xl font-black italic tracking-tighter uppercase text-white">TechBox</span>
+            </div>
+            <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 ARPMart Systems. All
+                Gear Verified.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initMarquee();
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search');
+            if (initialSearch) {
+                const searchInput = document.getElementById('mobileSearch');
+                if (searchInput) {
+                    searchInput.value = initialSearch;
+                }
+                document.getElementById('marqueeSection').classList.add('hidden');
+                document.getElementById('productSection').classList.remove('hidden');
+            }
+            renderProducts();
+        });
+
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const sortVal = document.getElementById('sortLogic')?.value;
+            const searchVal = document.getElementById('mobileSearch')?.value?.trim().toLowerCase() || '';
+
+            // Base filtered list (Mobiles only)
+            let products = customList || window.GLOBAL_CATALOG.filter(p => p.category === 'mobiles');
+
+            // Apply Real-time Name Search
+            if (searchVal) {
+                products = products.filter(p => p.name.toLowerCase().includes(searchVal));
+            }
+
+            // Apply Sorting Logic
+            if (sortVal === 'price-asc') products.sort((a, b) => a.price - b.price);
+            if (sortVal === 'price-desc') products.sort((a, b) => b.price - a.price);
+
+            if (products.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-40 text-center">
+                    <p class="text-slate-400 font-black uppercase tracking-widest text-xs">No Signal. Items not found.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="tech-card rounded-[2.5rem] p-8 space-y-6 cursor-pointer flex flex-col" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <div class="relative aspect-square rounded-[2rem] overflow-hidden bg-slate-100 flex items-center justify-center group">
+                        <img src="${p.image}" alt="${p.name}" class="w-4/5 h-4/5 object-contain group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-tech opacity-0 group-hover:opacity-20 transition-opacity flex items-center justify-center">
+                            <div class="bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-tech transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-xl">
+                                Scan Specs
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-tech p-1 bg-tech/5 rounded-lg">${p.brand}</span>
+                                <h4 class="font-black text-xl text-slate-900 tracking-tight leading-tight uppercase italic">${p.name}</h4>
+                            </div>
+                            <span class="text-2xl font-black text-slate-900 tracking-tighter italic">₹${p.price.toLocaleString('en-IN')}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium line-clamp-2 h-8">Premium device featuring cutting edge technology and elite performance specs.</p>
+                        <div class="mt-auto pt-4 flex items-center gap-3">
+                            <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" class="flex-1 bg-device text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-tech transition-all active:scale-95 shadow-xl shadow-device/20 z-10">
+                                Pre-Order Gear
+                            </button>
+                            <button class="p-4 bg-slate-100 text-slate-400 rounded-2xl hover:text-tech transition-colors">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function filterBrand(brand) {
+            // When filtering by brand, we typically want a fresh start
+            document.getElementById('mobileSearch').value = '';
+            const filtered = window.GLOBAL_CATALOG.filter(p => p.category === 'mobiles' && p.brand === brand);
+            renderProducts(filtered);
+        }
+
+        function clearEngine() {
+            document.getElementById('mobileSearch').value = '';
+            document.getElementById('sortLogic').value = 'all';
+            renderProducts();
+        }
+
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`System Synced: ${product.name} ready for delivery.`);
+            }
+        }
+    </script>
+</body>
+
+</html>

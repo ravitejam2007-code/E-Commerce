@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlyNow | ARPMart - Premium Travel & Bookings</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sky: '#3b82f6',
+                        cloud: '#f8fafc',
+                        runway: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .flight-hero {
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+        }
+
+        .nav-blur {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        /* Travel Card Styles */
+        .travel-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .travel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .travel-card-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .travel-card:hover .travel-card-image {
+            transform: scale(1.1);
+        }
+
+        .travel-badge {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f1f5f9] text-slate-900 font-sans custom-scrollbar">
+
+    <!-- Travel Header -->
+    <header class="nav-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="bg-sky p-2 rounded-2xl shadow-lg transition-all group-hover:scale-110">
+                    <i data-lucide="plane" class="w-6 h-6 text-white group-hover:rotate-12 transition-transform"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-sky uppercase italic">FlyNow</span>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">by ARPMart</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div id="user-section" class="flex items-center gap-4"></div>
+                <button onclick="ShopUI.toggleSearch()"
+                    class="group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-sky transition-all">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400 group-hover:text-sky transition-colors"></i>
+                </button>
+                <!-- Mini Cart for Travel Gear -->
+                <button id="openCartBtn"
+                    class="relative group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-sky transition-all">
+                    <i data-lucide="luggage" class="w-5 h-5 text-sky"></i>
+                    <span id="cartCount"
+                        class="absolute -top-1 -right-1 bg-sky text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="space-y-16 pb-24">
+
+        <!-- Hero Section -->
+        <section class="relative pt-10 px-6">
+            <div class="max-w-7xl mx-auto relative rounded-[3rem] overflow-hidden aspect-[21/9] flight-hero group">
+                <img src="https://images.unsplash.com/photo-1436491865332-7a61a109c055?auto=format&fit=crop&w=1600"
+                    class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-[3s]">
+                <div class="absolute inset-0 flex flex-col justify-center px-12 sm:px-24 space-y-8">
+                    <div
+                        class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-[0.4em]">
+                        <i data-lucide="globe" class="w-3 h-3"></i>
+                        SkyBound Concierge
+                    </div>
+                    <h1
+                        class="text-5xl sm:text-8xl font-black text-white leading-[0.9] tracking-tighter uppercase italic">
+                        BEYOND<br>HORIZONS.
+                    </h1>
+                    <p class="text-slate-200 text-lg font-medium max-w-md">Seamless booking for global routes. Premium
+                        travel gear included in every journey.</p>
+                </div>
+            </div>
+
+            <!-- Floating Search Box -->
+            <div class="max-w-5xl mx-auto -mt-16 relative z-10">
+                <div
+                    class="glass-card shadow-2xl shadow-sky/10 rounded-[2.5rem] p-6 sm:p-8 flex flex-col md:flex-row gap-4 items-end">
+                    <div class="flex-1 space-y-2 w-full">
+                        <label
+                            class="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Departure</label>
+                        <div class="bg-white rounded-2xl p-4 flex items-center gap-3 border border-slate-100">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-sky"></i>
+                            <input type="text" id="flightFrom" placeholder="E.g. DEL"
+                                class="bg-transparent border-none w-full text-sm font-bold outline-none">
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-2 w-full">
+                        <label
+                            class="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Destination</label>
+                        <div class="bg-white rounded-2xl p-4 flex items-center gap-3 border border-slate-100">
+                            <i data-lucide="navigation" class="w-4 h-4 text-sky"></i>
+                            <input type="text" id="flightTo" placeholder="E.g. BOM"
+                                class="bg-transparent border-none w-full text-sm font-bold outline-none">
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-2 w-full">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Date</label>
+                        <div
+                            class="bg-white rounded-2xl p-4 flex items-center gap-3 border border-slate-100 cursor-text">
+                            <i data-lucide="calendar" class="w-4 h-4 text-sky"></i>
+                            <input type="date" id="flightDate"
+                                class="bg-transparent border-none w-full text-sm font-bold outline-none text-slate-500 cursor-pointer">
+                        </div>
+                    </div>
+                    <button id="flightSearchBtn" onclick="handleFlightSearch()"
+                        class="w-full md:w-auto md:self-end bg-sky text-white px-8 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:shadow-xl hover:shadow-sky/40 transition-all active:scale-95 flex items-center justify-center">
+                        <i data-lucide="search" class="w-4 h-4 inline mr-2 text-white"></i>
+                        Find Flights
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flight Results Section (Hidden by default) -->
+            <div id="flightResultsSection" class="max-w-5xl mx-auto space-y-6 hidden mt-16 z-20 relative">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tighter uppercase italic">Available
+                            Flights</h2>
+                        <p id="flightResultsMeta" class="text-slate-400 font-medium text-sm"></p>
+                    </div>
+                </div>
+                <div id="flightResultsContainer" class="space-y-4">
+                    <!-- Flights injected here via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Travel Essentials Section -->
+        <section class="max-w-7xl mx-auto px-6 space-y-10">
+            <div class="flex items-end justify-between px-2">
+                <div class="space-y-1">
+                    <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">Flight Essentials
+                    </h2>
+                    <p class="text-slate-400 font-medium text-sm">Premium gear for the modern voyager.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Categories</span>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-4 py-2 bg-sky text-white text-[10px] font-black uppercase tracking-widest rounded-full">All</button>
+                        <button
+                            class="px-4 py-2 bg-white text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-sky hover:text-white transition-all">Luggage</button>
+                        <button
+                            class="px-4 py-2 bg-white text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-sky hover:text-white transition-all">Comfort</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Product Grid -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Travel Products Injected Here -->
+            </div>
+        </section>
+
+        <!-- Destination Cards Section -->
+        <section class="max-w-7xl mx-auto px-6 space-y-10">
+            <div class="flex items-end justify-between px-2">
+                <div class="space-y-1">
+                    <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">Trending Routes
+                    </h2>
+                    <p class="text-slate-400 font-medium text-sm">Most booked destinations this season.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Destination Card 1 -->
+                <div class="travel-card relative rounded-[2rem] overflow-hidden aspect-[4/5] group cursor-pointer">
+                    <img src="https://i.pinimg.com/564x/16/09/a7/1609a7b88743710ead837d343cf9f41b.jpg"
+                        class="travel-card-image absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="plane" class="w-4 h-4 text-sky"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-sky">Direct Flight</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white uppercase italic">Paris, France</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">From ₹45,999</span>
+                            <span
+                                class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-white">5h
+                                30m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destination Card 2 -->
+                <div class="travel-card relative rounded-[2rem] overflow-hidden aspect-[4/5] group cursor-pointer">
+                    <img src="https://www.ytravelblog.com/wp-content/uploads/2022/09/Senso-Ji-Temple-tokyo.jpg"
+                        class="travel-card-image absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="plane" class="w-4 h-4 text-sky"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-sky">Direct Flight</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white uppercase italic">Tokyo, Japan</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">From ₹62,999</span>
+                            <span
+                                class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-white">7h
+                                15m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destination Card 3 -->
+                <div class="travel-card relative rounded-[2rem] overflow-hidden aspect-[4/5] group cursor-pointer">
+                    <img src="https://traveltipzone.com/wp-content/uploads/uae-7-day-itinerary-discover-the-united-arab-emirates-in-one-week-dubai-abu-dhabi-beyond-img-3623-960x768.jpg"
+                        class="travel-card-image absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="plane" class="w-4 h-4 text-sky"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-sky">Direct Flight</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white uppercase italic">Dubai, UAE</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">From ₹28,999</span>
+                            <span
+                                class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-white">3h
+                                45m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Modal (Travel Themed) -->
+    <div id="cartModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden"
+        onclick="if(event.target===this){this.classList.add('hidden');document.body.style.overflow=''}">
+        <div class="absolute right-0 top-0 w-full sm:w-[480px] h-full bg-white shadow-2xl">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="luggage" class="w-6 h-6 text-sky"></i>
+                        <h3 class="text-xl font-black text-slate-900 uppercase italic">Travel Cart</h3>
+                    </div>
+                    <button onclick="this.closest('#cartModal').classList.add('hidden');document.body.style.overflow=''"
+                        class="p-2 hover:bg-slate-100 rounded-xl transition-all">
+                        <i data-lucide="x" class="w-5 h-5 text-slate-400"></i>
+                    </button>
+                </div>
+
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto space-y-4">
+                    <p id="emptyCartMessage" class="text-center text-slate-400 text-sm py-12">Your travel cart is empty.
+                    </p>
+                </div>
+
+                <div id="cartSummary" class="pt-6 border-t border-slate-100 space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-sm font-medium">Subtotal</span>
+                        <span id="cartTotal" class="text-lg font-black text-slate-900">₹0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-sm font-medium">Travel Insurance</span>
+                        <span class="text-sm font-bold text-sky">₹499</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <span class="text-slate-900 font-black uppercase">Total</span>
+                        <span id="cartTotalFinal" class="text-2xl font-black text-sky">₹0</span>
+                    </div>
+                    <button onclick="ARPMart.placeOrder()"
+                        class="w-full bg-sky text-white py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-xl hover:shadow-sky/40 transition-all active:scale-[0.98]">
+                        <i data-lucide="ticket" class="w-4 h-4 inline mr-2"></i>
+                        Complete Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-runway text-white py-32">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-8">
+            <div
+                class="flex justify-center items-center gap-3 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <div class="bg-sky p-2 rounded-xl">
+                    <i data-lucide="plane" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter uppercase text-white italic">FlyNow System</span>
+            </div>
+            <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.6em]">© 2026 ARPMart Logistics.
+                Verified Operations.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search')?.toLowerCase();
+            if (initialSearch) {
+                const filtered = window.GLOBAL_CATALOG.filter(p =>
+                    p.category === 'travel' &&
+                    (p.name.toLowerCase().includes(initialSearch) || p.brand.toLowerCase().includes(initialSearch))
+                );
+                renderTravelProducts(filtered);
+            } else {
+                renderTravelProducts();
+            }
+        });
+
+        // Local travel data removed - architecture now unified with GLOBAL_CATALOG.
+
+        function renderTravelProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const products = customList || window.GLOBAL_CATALOG.filter(p => p.category === 'travel');
+
+            grid.innerHTML = products.map(p => `
+                <div class="travel-card bg-white rounded-[2rem] overflow-hidden border border-slate-100 group cursor-pointer flex flex-col" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <!-- Image Section -->
+                    <div class="aspect-square relative overflow-hidden bg-slate-50">
+                        <img src="${p.image}" 
+                            alt="${p.name}" 
+                            class="travel-card-image w-full h-full object-cover"
+                            loading="lazy">
+                        
+                        <div class="absolute inset-0 bg-sky/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-sky transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-sm">View Flight Gear</span>
+                        </div>
+
+                        <!-- Quick Add Button -->
+                        <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" 
+                            class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-sky hover:text-white shadow-lg z-10">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Content Section -->
+                    <div class="p-6 space-y-4 flex-1 flex flex-col">
+                        <div class="space-y-2">
+                            <h4 class="font-black text-sm text-slate-900 line-clamp-1 uppercase italic tracking-tight">${p.name}</h4>
+                            <p class="text-slate-400 text-[11px] font-medium line-clamp-2">${p.description}</p>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded-lg">
+                                <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-yellow-500"></i>
+                                <span class="text-[10px] font-black text-slate-700">${p.rating}</span>
+                            </div>
+                            <span class="text-[10px] font-medium text-slate-400">Verified Gear</span>
+                        </div>
+                        
+                        <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100">
+                            <span class="text-xl font-black italic text-slate-900">₹${p.price.toLocaleString('en-IN')}</span>
+                            <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" 
+                                class="bg-sky text-white px-4 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] hover:shadow-lg hover:shadow-sky/40 transition-all active:scale-95 z-10">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`✈️ ${product.name} added to your travel manifest!`);
+            }
+        }
+
+        // --- MOCKED FLIGHT SEARCH LOGIC ---
+        const MOCK_FLIGHTS = [
+            { id: 'f1', airline: 'IndiGo', from: 'DEL', to: 'BOM', dep: '06:30', arr: '08:45', dur: '2h 15m', price: 4500, link: 'https://www.goindigo.in/' },
+            { id: 'f2', airline: 'Air India', from: 'DEL', to: 'BOM', dep: '08:00', arr: '10:15', dur: '2h 15m', price: 5200, link: 'https://www.airindia.in/' },
+            { id: 'f3', airline: 'Vistara', from: 'DEL', to: 'BOM', dep: '10:30', arr: '12:40', dur: '2h 10m', price: 6100, link: 'https://www.airvistara.com/' },
+            { id: 'f4', airline: 'SpiceJet', from: 'BLR', to: 'DEL', dep: '14:00', arr: '16:45', dur: '2h 45m', price: 4800, link: 'https://corporate.spicejet.com/' },
+            { id: 'f5', airline: 'Akasa Air', from: 'BLR', to: 'DEL', dep: '18:15', arr: '21:00', dur: '2h 45m', price: 5000, link: 'https://www.akasaair.com/' },
+            { id: 'f6', airline: 'IndiGo', from: 'BOM', to: 'BLR', dep: '07:00', arr: '08:45', dur: '1h 45m', price: 3500, link: 'https://www.goindigo.in/' },
+            { id: 'f7', airline: 'Air India', from: 'BOM', to: 'BLR', dep: '11:00', arr: '12:50', dur: '1h 50m', price: 4200, link: 'https://www.airindia.in/' },
+            { id: 'f8', airline: 'Emirates', from: 'DEL', to: 'DXB', dep: '21:00', arr: '23:30', dur: '4h 00m', price: 18500, link: 'https://www.emirates.com/' },
+            { id: 'f9', airline: 'Air France', from: 'BOM', to: 'CDG', dep: '02:00', arr: '08:15', dur: '10h 45m', price: 42000, link: 'https://wwws.airfrance.in/' },
+        ];
+
+        function handleFlightSearch() {
+            const fromVal = document.getElementById('flightFrom').value.trim().toUpperCase();
+            const toVal = document.getElementById('flightTo').value.trim().toUpperCase();
+
+            if (!fromVal || !toVal) {
+                ShopUI.showToast('Please enter both Departure and Destination.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('flightSearchBtn');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 inline mr-2 text-white animate-spin"></i> Searching...`;
+
+            setTimeout(() => {
+                const resultsSection = document.getElementById('flightResultsSection');
+                const container = document.getElementById('flightResultsContainer');
+                const meta = document.getElementById('flightResultsMeta');
+
+                // Realish fuzzy search simulation (first 3 letters match)
+                let results = MOCK_FLIGHTS.filter(f =>
+                    f.from.includes(fromVal.slice(0, 3)) && f.to.includes(toVal.slice(0, 3))
+                );
+
+                // If no exact match, show random mock flights substituting user inputs for effect
+                if (results.length === 0) {
+                    let shuffled = [...MOCK_FLIGHTS].sort(() => 0.5 - Math.random()).slice(0, 3);
+                    results = shuffled.map(f => ({ ...f, from: fromVal.slice(0, 3) || f.from, to: toVal.slice(0, 3) || f.to }));
+                }
+
+                meta.textContent = `Found ${results.length} flights from ${fromVal} to ${toVal}`;
+
+                container.innerHTML = results.map(f => `
+                    <div class="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:border-sky/40 transition-all flex flex-col md:flex-row items-center gap-6 group">
+                        <div class="w-16 h-16 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center shrink-0 shadow-inner">
+                            <span class="font-black text-[12px] px-1 overflow-hidden text-slate-800 uppercase text-center leading-tight tracking-tighter">${f.airline}</span>
+                        </div>
+                        
+                        <div class="flex-1 flex justify-between items-center w-full">
+                            <div class="text-center md:text-left min-w-[80px]">
+                                <div class="text-2xl font-black text-slate-900 tracking-tighter">${f.dep}</div>
+                                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${f.from}</div>
+                            </div>
+                            
+                            <div class="flex-1 px-4 sm:px-8 flex flex-col items-center relative">
+                                <div class="text-[10px] font-black text-slate-400 mb-2 bg-white px-2 z-10">${f.dur}</div>
+                                <div class="w-full border-t-2 border-dashed border-slate-200 absolute top-1/2 -translate-y-1/2"></div>
+                                <i data-lucide="plane" class="w-5 h-5 text-sky absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-1 z-10 group-hover:translate-x-4 transition-transform duration-700"></i>
+                                <div class="text-[9px] font-black text-emerald-500 uppercase mt-2 tracking-[0.2em] bg-white px-2 z-10">Direct</div>
+                            </div>
+                            
+                            <div class="text-center md:text-right min-w-[80px]">
+                                <div class="text-2xl font-black text-slate-900 tracking-tighter">${f.arr}</div>
+                                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${f.to}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row md:flex-col items-center justify-between gap-4 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-6 md:pt-0 md:pl-8">
+                            <div class="text-3xl font-black text-slate-900 tracking-tighter italic">₹${f.price.toLocaleString('en-IN')}</div>
+                            <button onclick="window.open('${f.link}', '_blank')" class="w-full sm:w-auto md:w-full bg-slate-900 text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-sky transition-all shadow-lg active:scale-95">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                resultsSection.classList.remove('hidden');
+                btn.innerHTML = originalBtnText;
+                lucide.createIcons();
+
+                // Scroll into view gently
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 1000);
+        }
+
+        // Legacy cart modal logic removed - now handled by shared ShopUI.
+    </script>
+</body>
+
+</html>

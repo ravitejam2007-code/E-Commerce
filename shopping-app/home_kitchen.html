@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home & Kitchen | ARPMart - Modern Living Essentials</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        warm: '#ea5753',
+                        soft: '#ffb88c',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .home-card {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .home-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 40px 60px -20px rgba(234, 87, 83, 0.15);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(234, 87, 83, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-[#fcfcfc] text-slate-900 font-sans custom-scrollbar">
+
+    <!-- Home Header -->
+    <header class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div
+                    class="bg-gradient-to-br from-soft to-warm p-2 rounded-xl shadow-lg transition-transform group-hover:rotate-12">
+                    <i data-lucide="home" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-warm uppercase italic">Hearth & Home</span>
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">by ARPMart</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div id="user-section" class="flex items-center gap-4"></div>
+                <button onclick="ShopUI.toggleSearch()"
+                    class="group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-warm transition-all">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400 group-hover:text-warm transition-colors"></i>
+                </button>
+                <button id="openCartBtn"
+                    class="relative group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-warm transition-all">
+                    <i data-lucide="shopping-cart"
+                        class="w-5 h-5 text-warm group-hover:scale-110 transition-transform"></i>
+                    <span id="cartCount"
+                        class="absolute -top-1 -right-1 bg-warm text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+        <!-- Cozy Hero -->
+        <section class="relative rounded-[3rem] overflow-hidden aspect-[21/8] bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1506368249639-73a05d6f6488?auto=format&fit=crop&w=1600"
+                class="absolute inset-0 w-full h-full object-cover opacity-70">
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/20 to-transparent flex items-center px-12 sm:px-24">
+                <div class="max-w-xl space-y-6">
+                    <span class="text-[10px] font-black uppercase tracking-[0.4em] text-soft">Curated Culinary
+                        Tools</span>
+                    <h1 class="text-4xl sm:text-7xl font-black text-white leading-tight tracking-tighter italic">
+                        WARMTH<br>DEFINED.</h1>
+                    <p class="text-slate-300 text-lg font-medium">Discover the perfect blend of functionality and
+                        comfort for your kitchen sanctuary.</p>
+                    <button
+                        class="bg-warm text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-warm transition-all shadow-xl active:scale-95">
+                        Shop Collection
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Market -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            <!-- Market Sidebar -->
+            <aside class="space-y-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Essentials</h4>
+                        <nav id="categoryFilters" class="flex flex-col gap-2">
+                            <button onclick="filterType('all')"
+                                class="cat-btn active group flex items-center justify-between p-4 rounded-2xl bg-warm/5 border border-transparent hover:border-warm transition-all">
+                                <span
+                                    class="text-xs font-black text-warm group-hover:text-warm uppercase tracking-widest">Everything</span>
+                                <i data-lucide="check" class="w-3 h-3 text-warm"></i>
+                            </button>
+                            <button onclick="filterType('Cookware')"
+                                class="cat-btn group flex items-center justify-between p-4 rounded-2xl bg-white hover:bg-warm/5 border border-transparent hover:border-warm transition-all">
+                                <span
+                                    class="text-xs font-black text-slate-400 group-hover:text-warm uppercase tracking-widest">Cookware</span>
+                                <i data-lucide="chef-hat" class="w-4 h-4 text-slate-300"></i>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-50">
+                        <div class="rounded-3xl bg-soft/10 p-6 space-y-2 border border-soft/20">
+                            <span class="text-[9px] font-black uppercase text-warm tracking-widest">Seasonal
+                                Offer</span>
+                            <h5 class="text-sm font-black italic">Buy 2 Get 15% OFF</h5>
+                            <p class="text-[10px] text-slate-500">On all artisanal kitchen accessories.</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Shop -->
+            <div class="lg:col-span-3 space-y-10">
+                <div class="flex items-end justify-between px-2">
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">The Pantry</h2>
+                        <p class="text-slate-400 font-medium text-sm">Showing <span id="product-count"
+                                class="font-bold text-warm">0</span> artisan items</p>
+                    </div>
+                </div>
+
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <!-- Products Hydrated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-100 py-32 mt-20">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-8">
+            <div class="flex justify-center items-center gap-3">
+                <div class="bg-warm p-2 rounded-xl">
+                    <i data-lucide="home" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter uppercase text-slate-900">Hearth & Home</span>
+            </div>
+            <p class="text-slate-400 text-[9px] font-black uppercase tracking-[0.5em]">© 2026 ARPMart. The Heart of the
+                House.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search')?.toLowerCase();
+            if (initialSearch) {
+                const filtered = window.GLOBAL_CATALOG.filter(p =>
+                    p.category === 'home & kitchen' &&
+                    (p.name.toLowerCase().includes(initialSearch) || p.brand.toLowerCase().includes(initialSearch))
+                );
+                renderProducts(filtered);
+            } else {
+                renderProducts();
+            }
+        });
+
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const products = customList || window.GLOBAL_CATALOG.filter(p => p.category === 'home & kitchen');
+
+            if (document.getElementById('product-count')) {
+                document.getElementById('product-count').textContent = products.length;
+            }
+
+            if (products.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-40 text-center">
+                    <p class="text-slate-300 font-black uppercase tracking-widest text-xs">Pantry is currently empty</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="home-card bg-white rounded-[2.5rem] p-6 border border-slate-100 group flex flex-col h-full cursor-pointer" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <div class="relative aspect-square rounded-[2rem] overflow-hidden bg-slate-50 mb-6 border border-slate-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-warm/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-warm transform translate-y-4 group-hover:translate-y-0 transition-transform">Essential Info</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col space-y-4">
+                        <div class="space-y-1">
+                            <span class="text-[9px] font-black uppercase tracking-[0.3em] text-warm/50 italic">${p.brand}</span>
+                            <h4 class="font-black text-xl text-slate-900 tracking-tight leading-tight uppercase italic min-h-[3rem] line-clamp-2 uppercase italic">${p.name}</h4>
+                        </div>
+                        <div class="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-black uppercase text-slate-400 tracking-tighter">Essential Pick</span>
+                                <span class="text-2xl font-black text-warm tracking-tighter italic">₹${p.price.toLocaleString('en-IN')}</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" class="bg-slate-900 text-white p-4 rounded-2xl hover:bg-warm transition-all shadow-xl active:scale-90 z-10">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function filterType(type) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-warm/5', 'border-warm');
+                btn.querySelector('span').classList.replace('text-warm', 'text-slate-400');
+            });
+            event.currentTarget.classList.add('active', 'bg-warm/5', 'border-warm');
+            event.currentTarget.querySelector('span').classList.replace('text-slate-400', 'text-warm');
+
+            const filtered = type === 'all'
+                ? window.GLOBAL_CATALOG.filter(p => p.category === 'home & kitchen')
+                : window.GLOBAL_CATALOG.filter(p => p.category === 'home & kitchen' && p.name.includes(type));
+
+            renderProducts(filtered);
+        }
+
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`Selected: ${product.name} is ready for your kitchen.`);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TVs & Appliances — Premium Electra | ARPMart</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        electra: '#0ea5a4',
+                        premium: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .appliance-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .appliance-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px -15px rgba(14, 165, 164, 0.15);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(14, 165, 164, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans custom-scrollbar">
+
+    <!-- Electra Header -->
+    <header class="glass-header sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="bg-electra p-2 rounded-xl shadow-lg transition-transform group-hover:-rotate-6">
+                    <i data-lucide="tv" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-black tracking-tight text-electra uppercase">Electra</span>
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">by ARPMart</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div id="user-section" class="flex items-center gap-4"></div>
+                <button onclick="ShopUI.toggleSearch()"
+                    class="group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-electra transition-all">
+                    <i data-lucide="search"
+                        class="w-5 h-5 text-slate-400 group-hover:text-electra transition-colors"></i>
+                </button>
+                <button id="openCartBtn"
+                    class="relative group p-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-electra transition-all">
+                    <i data-lucide="shopping-bag"
+                        class="w-5 h-5 text-electra group-hover:scale-110 transition-transform"></i>
+                    <span id="cartCount"
+                        class="absolute -top-1 -right-1 bg-electra text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+        <!-- Experience Hero -->
+        <section class="relative rounded-[3rem] overflow-hidden aspect-[21/8] bg-premium">
+            <img src="https://images.unsplash.com/photo-1593359677771-082f18269521?auto=format&fit=crop&w=1600"
+                class="absolute inset-0 w-full h-full object-cover opacity-60">
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-premium via-premium/40 to-transparent flex items-center px-12 sm:px-24">
+                <div class="max-w-xl space-y-6">
+                    <span
+                        class="bg-electra/20 border border-electra/30 text-electra text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-[0.4em]">Next-Gen
+                        Visuals</span>
+                    <h1 class="text-4xl sm:text-7xl font-black text-white leading-tight tracking-tighter italic">
+                        CINEMATIC<br>FLOW.</h1>
+                    <p class="text-slate-300 text-lg font-medium">Elevate your living space with intelligent home
+                        solutions and 8K entertainment.</p>
+                    <button
+                        class="bg-white text-premium px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-electra hover:text-white transition-all shadow-xl active:scale-95 flex items-center gap-3">
+                        Shop Exclusive <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Hub -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            <!-- Electra Filters -->
+            <aside class="space-y-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
+                    <div class="space-y-4">
+                        <h4 class="text-xs font-black uppercase tracking-[0.4em] text-slate-400">Categories</h4>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="filterSubcat('all')"
+                                class="subcat-btn active group flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-transparent hover:border-electra transition-all">
+                                <span
+                                    class="text-xs font-black text-slate-500 group-hover:text-electra uppercase tracking-widest">All
+                                    Tech</span>
+                                <i data-lucide="check"
+                                    class="w-3 h-3 text-electra opacity-0 group-[.active]:opacity-100"></i>
+                            </button>
+                            <button onclick="filterSubcat('TV')"
+                                class="subcat-btn group flex items-center justify-between p-4 rounded-2xl bg-white hover:bg-slate-50 border border-transparent hover:border-electra transition-all">
+                                <span
+                                    class="text-xs font-black text-slate-500 group-hover:text-electra uppercase tracking-widest">Smart
+                                    TVs</span>
+                                <i data-lucide="monitor" class="w-4 h-4 text-slate-300"></i>
+                            </button>
+                            <button onclick="filterSubcat('Refrigerator')"
+                                class="subcat-btn group flex items-center justify-between p-4 rounded-2xl bg-white hover:bg-slate-50 border border-transparent hover:border-electra transition-all">
+                                <span
+                                    class="text-xs font-black text-slate-500 group-hover:text-electra uppercase tracking-widest">Cooling</span>
+                                <i data-lucide="snowflake" class="w-4 h-4 text-slate-300"></i>
+                            </button>
+                            <button onclick="filterSubcat('Washing Machine')"
+                                class="subcat-btn group flex items-center justify-between p-4 rounded-2xl bg-white hover:bg-slate-50 border border-transparent hover:border-electra transition-all">
+                                <span
+                                    class="text-xs font-black text-slate-500 group-hover:text-electra uppercase tracking-widest">Laundry</span>
+                                <i data-lucide="wind" class="w-4 h-4 text-slate-300"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-50">
+                        <div class="p-6 bg-slate-900 rounded-[2rem] text-center space-y-3">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-electra mx-auto"></i>
+                            <p class="text-[10px] font-black text-white uppercase tracking-widest leading-loose">Extra
+                                2-Year Warranty on Select Models</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Grid Content -->
+            <div class="lg:col-span-3 space-y-10">
+                <div class="flex items-end justify-between px-2">
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase">The Inventory</h2>
+                        <p class="text-slate-400 font-medium text-sm">Showing <span id="product-count"
+                                class="font-bold text-electra">0</span> Smart Appliances</p>
+                    </div>
+                    <select id="sortOption" onchange="renderProducts()"
+                        class="bg-white border-none rounded-xl p-3 text-[10px] font-black uppercase tracking-widest text-slate-500 focus:ring-2 focus:ring-electra/20 outline-none shadow-sm cursor-pointer">
+                        <option value="featured">Recommended</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                    </select>
+                </div>
+
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <!-- Hydrated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="bg-white border-t border-slate-100 py-32">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-8">
+            <div
+                class="flex justify-center items-center gap-3 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <div class="bg-electra p-2 rounded-xl">
+                    <i data-lucide="tv" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter uppercase text-slate-900">Electra Hub</span>
+            </div>
+            <p class="text-slate-400 text-[9px] font-black uppercase tracking-[0.5em]">© 2026 ARPMart. Digital Life
+                Integrated.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search')?.toLowerCase();
+            if (initialSearch) {
+                const filtered = window.GLOBAL_CATALOG.filter(p =>
+                    p.category === 'electronics' &&
+                    (p.name.toLowerCase().includes(initialSearch) || p.brand.toLowerCase().includes(initialSearch))
+                );
+                renderProducts(filtered);
+            } else {
+                renderProducts();
+            }
+        });
+
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const sortVal = document.getElementById('sortOption')?.value;
+            let products = customList || window.GLOBAL_CATALOG.filter(p => p.category === 'electronics');
+
+            if (sortVal === 'price-asc') products.sort((a, b) => a.price - b.price);
+            if (sortVal === 'price-desc') products.sort((a, b) => b.price - a.price);
+
+            if (document.getElementById('product-count')) {
+                document.getElementById('product-count').textContent = products.length;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="appliance-card bg-white rounded-[2.5rem] p-6 border border-slate-100 group flex flex-col h-full cursor-pointer" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <div class="relative aspect-[4/3] rounded-[2rem] overflow-hidden bg-slate-50 mb-6 flex items-center justify-center p-4">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-electra/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-electra transform translate-y-4 group-hover:translate-y-0 transition-transform">Tech Specs</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-100 z-10">
+                             <div class="flex items-center gap-1 text-amber-500">
+                                <i data-lucide="star" class="w-3 h-3 fill-current uppercase"></i>
+                                <span class="text-[10px] font-black">${p.rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col space-y-4">
+                        <div class="space-y-1">
+                            <span class="text-[9px] font-black uppercase tracking-[0.3em] text-electra/50 italic">${p.brand}</span>
+                            <h4 class="font-black text-xl text-slate-900 tracking-tight leading-tight uppercase italic min-h-[3rem] line-clamp-2 uppercase italic">${p.name}</h4>
+                        </div>
+                        <div class="mt-auto pt-4 flex items-center justify-between border-t border-slate-50">
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-black uppercase text-slate-400 tracking-widest tracking-tighter">Premium Offer</span>
+                                <span class="text-2xl font-black text-slate-900 tracking-tighter italic">₹${p.price.toLocaleString('en-IN')}</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" class="bg-slate-900 text-white p-4 rounded-2xl hover:bg-electra transition-all shadow-xl active:scale-90 z-10">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function filterSubcat(sub) {
+            document.querySelectorAll('.subcat-btn').forEach(btn => btn.classList.remove('active', 'bg-slate-50', 'border-electra'));
+            event.currentTarget.classList.add('active', 'bg-slate-50', 'border-electra');
+
+            const filtered = sub === 'all'
+                ? window.GLOBAL_CATALOG.filter(p => p.category === 'electronics')
+                : window.GLOBAL_CATALOG.filter(p => p.category === 'electronics' && p.name.includes(sub));
+
+            renderProducts(filtered);
+        }
+
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`Verified! ${product.name} is scheduled for setup.`);
+            }
+        }
+    </script>
+</body>
+
+</html>

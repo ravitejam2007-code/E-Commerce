@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARPMart Fashion — Trendy Collections</title>
+    <link rel="shortcut icon" href="/thunder.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- UI Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared Architecture -->
+    <script src="./js/products.js"></script>
+    <script src="./js/core.js"></script>
+    <script src="./js/ui.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fashion: '#e11d48', // rose-600
+                        primary: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .fashion-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fashion-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-[#fafafa] text-slate-900 font-sans custom-scrollbar">
+
+    <!-- Fashion Glass Header -->
+    <header class="glass-header sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-12">
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <div class="bg-fashion p-2 rounded-xl transition-transform group-hover:rotate-12">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="text-2xl font-black italic tracking-tighter text-slate-900 uppercase">SHAPE</span>
+                </a>
+
+                <nav
+                    class="hidden lg:flex items-center gap-8 text-sm font-bold uppercase tracking-widest text-slate-500">
+                    <a href="index.html" class="hover:text-fashion transition-colors">Home</a>
+                    <a href="#" class="text-fashion underline underline-offset-8">Fashion</a>
+                    <button onclick="ShopUI.showToast('Men Category Coming Soon!')"
+                        class="hover:text-fashion transition-colors">Men</button>
+                    <button onclick="ShopUI.showToast('Women Category Coming Soon!')"
+                        class="hover:text-fashion transition-colors">Women</button>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div id="user-section" class="flex items-center gap-2">
+                    <!-- Populated by ShopUI -->
+                </div>
+
+                <button onclick="ShopUI.toggleSearch()" class="group p-2">
+                    <i data-lucide="search"
+                        class="w-6 h-6 text-slate-400 group-hover:text-fashion transition-colors"></i>
+                </button>
+
+                <button id="openCartBtn" class="relative group p-2">
+                    <i data-lucide="shopping-bag"
+                        class="w-6 h-6 text-slate-800 group-hover:text-fashion transition-colors"></i>
+                    <span id="cartCount"
+                        class="absolute -top-1 -right-1 bg-fashion text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Category Hero -->
+        <section class="relative h-[60vh] bg-slate-900 flex items-center overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2000" alt="Fashion Hero"
+                class="absolute inset-0 w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+
+            <div class="relative max-w-7xl mx-auto px-4 w-full animate-fade-in text-center sm:text-left">
+                <div class="max-w-2xl space-y-6">
+                    <h2 class="text-fashion font-black tracking-[0.2em] uppercase text-sm">Spring Collection 2026</h2>
+                    <h1 class="text-5xl sm:text-8xl font-black text-white leading-none tracking-tighter">
+                        VOGUE<br>ESSENCE</h1>
+                    <p class="text-slate-300 text-lg font-medium max-w-md mx-auto sm:mx-0">Experience the next
+                        generation of clothing. Curated styles from world-class designers.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
+                        <button
+                            class="bg-white text-slate-900 px-12 py-4 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:bg-fashion hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-black/20">Explore
+                            Gallery</button>
+                        <button
+                            class="bg-transparent border-2 border-white/20 text-white px-12 py-4 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:bg-white/10 transition-all backdrop-blur-md">View
+                            Regions</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Listings -->
+        <section class="max-w-7xl mx-auto px-4 py-24 space-y-20">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-8 pb-10 border-b border-slate-100">
+                <div class="space-y-2">
+                    <h3 class="text-5xl font-black text-slate-900 tracking-tighter uppercase italic">The Style Feed</h3>
+                    <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">Showing <span
+                            id="product-count" class="text-fashion inline-block px-2">0</span> exclusive pieces in
+                        Fashion</p>
+                </div>
+                <div class="flex gap-2 bg-slate-100 p-1 rounded-full">
+                    <button
+                        class="px-8 py-3 bg-white shadow-xl rounded-full text-[10px] font-black uppercase tracking-widest text-slate-900">New
+                        Arrivals</button>
+                    <button
+                        class="px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Popular</button>
+                </div>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
+                <!-- Products Hydrated by JS -->
+            </div>
+        </section>
+
+        <!-- Regional Feature -->
+        <section class="bg-slate-900 py-32 text-white">
+            <div class="max-w-7xl mx-auto px-4 space-y-16">
+                <div class="text-center space-y-4">
+                    <h2 class="text-4xl font-black tracking-tighter uppercase italic">Global Trends</h2>
+                    <p class="text-slate-400 max-w-xl mx-auto">From Paris to Tokyo, we bring the world's most exclusive
+                        fashion hubs directly to you.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="group relative aspect-[4/5] rounded-[2rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-8 space-y-2">
+                            <span class="text-fashion font-black uppercase tracking-widest text-[10px]">Europe</span>
+                            <h4 class="text-2xl font-black uppercase italic">Paris Fashion</h4>
+                            <p class="text-slate-400 text-sm">Luxury & Haute Couture.</p>
+                        </div>
+                    </div>
+                    <div class="group relative aspect-[4/5] rounded-[2rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-8 space-y-2">
+                            <span class="text-fashion font-black uppercase tracking-widest text-[10px]">Asia</span>
+                            <h4 class="text-2xl font-black uppercase italic">Seoul Trends</h4>
+                            <p class="text-slate-400 text-sm">Hyper-minimalism & Streetwear.</p>
+                        </div>
+                    </div>
+                    <div class="group relative aspect-[4/5] rounded-[2rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-8 space-y-2">
+                            <span class="text-fashion font-black uppercase tracking-widest text-[10px]">America</span>
+                            <h4 class="text-2xl font-black uppercase italic">NYC Style</h4>
+                            <p class="text-slate-400 text-sm">Industrial & Urban Luxury.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="bg-white border-t border-slate-100 py-32">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-8">
+            <div class="flex items-center justify-center gap-2 group cursor-pointer">
+                <div class="bg-fashion p-2 rounded-xl">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <span
+                    class="text-2xl font-black italic tracking-tighter text-slate-900 group-hover:text-fashion transition-colors">SHAPE</span>
+            </div>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.4em]">© 2026 ARPMart Fashion. All Rights
+                Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const initialSearch = params.get('search')?.toLowerCase();
+            if (initialSearch) {
+                const filtered = window.GLOBAL_CATALOG.filter(p =>
+                    p.category === 'fashion' &&
+                    (p.name.toLowerCase().includes(initialSearch) || p.brand.toLowerCase().includes(initialSearch))
+                );
+                renderProducts(filtered);
+            } else {
+                renderProducts();
+            }
+
+            // Subscribe to state changes if needed for page-specific UI
+            ARPMart.subscribe((state) => {
+                // Page-specific updates
+            });
+        });
+
+        /**
+         * Render fashion products with category-specific cards
+         */
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const products = customList || window.GLOBAL_CATALOG.filter(p => p.category === 'fashion');
+
+            if (document.getElementById('product-count')) {
+                document.getElementById('product-count').textContent = products.length;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="fashion-card group cursor-pointer" onclick="ShopUI.showProductDetails('${p.id}')">
+                    <div class="relative aspect-[3/4] overflow-hidden rounded-[2.5rem] bg-slate-50 mb-8 border border-slate-100">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                        
+                        <!-- Quick View Overlay -->
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 flex flex-col gap-4">
+                             <div class="w-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-center py-4 rounded-3xl text-[10px] font-black uppercase tracking-[0.3em]">
+                                Full Details
+                             </div>
+                             <button onclick="event.stopPropagation(); handleAddToCart('${p.id}')" class="w-full bg-white text-slate-900 py-4 rounded-3xl font-black uppercase tracking-widest text-[10px] shadow-2xl hover:bg-fashion hover:text-white transition-all transform hover:scale-105 active:scale-95">
+                                Add To Bag
+                             </button>
+                        </div>
+                    </div>
+                    <div class="space-y-3 px-4 text-center">
+                        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 group-hover:text-fashion transition-colors uppercase italic">${p.brand}</span>
+                        <h4 class="font-black text-xl text-slate-900 tracking-tighter uppercase italic leading-tight uppercase italic">${p.name}</h4>
+                        <div class="flex items-center justify-center gap-4">
+                            <span class="text-slate-300 font-bold line-through text-xs italic">₹${(p.price * 1.5).toLocaleString('en-IN')}</span>
+                            <span class="text-fashion font-black tracking-tighter italic text-2xl">₹${p.price.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        /**
+         * Specialized cart handler for fashion vibe
+         */
+        function handleAddToCart(id) {
+            const product = ARPMart.addToCart(id);
+            if (product) {
+                ShopUI.showToast(`Styled! ${product.name} is in your bag.`);
+            }
+        }
+    </script>
+</body>
+
+</html>
